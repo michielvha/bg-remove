@@ -1,0 +1,14 @@
+services:
+  app:
+    pull_policy: always
+    image: 'ghcr.io/michielvha/bg-remove:latest'
+    container_name: bg-remove
+    restart: unless-stopped
+    ports:
+      # These ports are in format <host-port>:<container-port>
+      - '8185:8080'
+networks:
+  default:
+    external: true
+    name: npm_default
+

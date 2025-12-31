@@ -1,7 +1,7 @@
 import './styles/index.css';
 import './styles/components.css';
 import { removeBackground } from '@imgly/background-removal';
-import { createIcons, Image as ImageIcon, Moon, Sun, Download, Upload, X, Loader } from 'lucide';
+import { createIcons, Image as ImageIcon, Moon, Sun, Download, Upload, X } from 'lucide';
 import { showToast } from './utils/toast';
 import { loadTheme, saveTheme } from './utils/storage';
 
@@ -44,13 +44,15 @@ class App {
         Download,
         Upload,
         X,
-        Loader,
       },
     });
   }
 
   private setupDOM(): void {
-    const app = document.querySelector<HTMLDivElement>('#app')!;
+    const app = document.querySelector<HTMLDivElement>('#app');
+    if (!app) {
+      throw new Error('App container not found');
+    }
 
     app.innerHTML = `
       <div class="header">
@@ -129,20 +131,35 @@ class App {
     `;
 
     // Store references
-    this.uploadZone = document.querySelector('#upload-zone')!;
-    this.fileInput = document.querySelector('#file-input')!;
-    this.themeToggle = document.querySelector('#theme-toggle')!;
-    this.imagePreviewContainer = document.querySelector('#image-preview-container')!;
-    this.originalPreview = document.querySelector('#original-preview')!;
-    this.processedPreview = document.querySelector('#processed-preview')!;
-    this.downloadBtn = document.querySelector('#download-btn')!;
-    this.clearBtn = document.querySelector('#clear-btn')!;
+    const uploadZone = document.querySelector('#upload-zone');
+    const fileInput = document.querySelector<HTMLInputElement>('#file-input');
+    const themeToggle = document.querySelector<HTMLInputElement>('#theme-toggle');
+    const imagePreviewContainer = document.querySelector('#image-preview-container');
+    const originalPreview = document.querySelector('#original-preview');
+    const processedPreview = document.querySelector('#processed-preview');
+    const downloadBtn = document.querySelector<HTMLButtonElement>('#download-btn');
+    const clearBtn = document.querySelector<HTMLButtonElement>('#clear-btn');
+
+    if (!uploadZone || !fileInput || !themeToggle || !imagePreviewContainer || 
+        !originalPreview || !processedPreview || !downloadBtn || !clearBtn) {
+      throw new Error('Required DOM elements not found');
+    }
+
+    this.uploadZone = uploadZone as HTMLElement;
+    this.fileInput = fileInput;
+    this.themeToggle = themeToggle;
+    this.imagePreviewContainer = imagePreviewContainer as HTMLElement;
+    this.originalPreview = originalPreview as HTMLElement;
+    this.processedPreview = processedPreview as HTMLElement;
+    this.downloadBtn = downloadBtn;
+    this.clearBtn = clearBtn;
   }
 
   private attachEventListeners(): void {
     // File input change
     this.fileInput.addEventListener('change', (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
       if (file) {
         this.handleFile(file);
       }

@@ -59,8 +59,3 @@ The app uses the `@imgly/background-removal` library, which runs a neural networ
 - No data is sent to any server
 - Processing happens entirely on your device
 - Works offline after the initial load
-
-## License
-
-MIT
-

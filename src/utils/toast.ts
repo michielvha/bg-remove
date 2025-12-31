@@ -1,4 +1,29 @@
+// Add slideOut animation to CSS (only once)
+let styleAdded = false;
+function ensureStyle(): void {
+  if (styleAdded) {
+    return;
+  }
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideOut {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+  styleAdded = true;
+}
+
 export function showToast(message: string, type: 'success' | 'error' = 'success'): void {
+  ensureStyle();
+
   // Remove existing toast if any
   const existingToast = document.querySelector('.toast');
   if (existingToast) {
@@ -19,20 +44,4 @@ export function showToast(message: string, type: 'success' | 'error' = 'success'
     }, 300);
   }, 3000);
 }
-
-// Add slideOut animation to CSS if needed
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes slideOut {
-    from {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateY(100%);
-      opacity: 0;
-    }
-  }
-`;
-document.head.appendChild(style);
 

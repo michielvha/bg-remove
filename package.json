@@ -19,6 +19,6 @@
   },
   "dependencies": {
     "@imgly/background-removal": "^1",
-    "lucide": "^0.460"
+    "lucide": "^0.577.0"
   }
 }
